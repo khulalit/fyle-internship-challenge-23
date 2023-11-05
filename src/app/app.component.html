@@ -1,5 +1,15 @@
-<div class="grid h-screen place-items-center">
-  <div class="font-bold text-3xl">
-    Fyle Internship Challenge
+<router-outlet>
+  <div class="p-x-4">
+    <div class=" px-4 -red-100 w-full">
+      <app-user-info />
+    </div>
+    <div class="flex gap-4 flex-wrap justify-start px-4">
+      <div class="basis-[300px] items-stretch flex bg-red-100" *ngFor="let repo of repos;">
+        <app-repositry-card title={{repo.name}} description={{repo.description}} />
+      </div>
+    </div>
   </div>
-</div>
+  <div *ngIf="username && repos && totalPages" class=" mt-20 w-full">
+    <app-pagination totalPages={{totalPages}} currentPage={{page}} username={{username}}/>
+  </div>
+</router-outlet>
