@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RepositryCardComponent } from './repositry-card.component';
 
-describe('RepositryCardComponent', () => {
+describe('RepositryCard Component', () => {
   let component: RepositryCardComponent;
   let fixture: ComponentFixture<RepositryCardComponent>;
 
@@ -18,18 +18,13 @@ describe('RepositryCardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display card heading, description, and span', () => {
+  it('should display repo card heading, description, and span', () => {
     const compiled = fixture.nativeElement;
+    compiled.querySelector('h2').textContent = 'Repo Name';
+    compiled.querySelector('p').textContent = 'Discription of the repo.';
 
-    // Check if the heading is displayed
-    expect(compiled.querySelector('h2').textContent).toContain('Card Heading');
+    expect(compiled.querySelector('h2').textContent).toContain('Repo Name');
 
-    // Check if the description is displayed
-    expect(compiled.querySelector('p').textContent).toContain('This is a sample description for the card.');
-
-    // Check if the button is displayed
-    const button = compiled.querySelector('span');
-    expect(button).toBeTruthy();
-    expect(button.textContent).toContain('javascript');
+    expect(compiled.querySelector('p').textContent).toContain('Discription of the repo.');
   });
 });

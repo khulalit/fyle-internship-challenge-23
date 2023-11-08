@@ -9,5 +9,5 @@ export class RepositryCardComponent {
   @Input() title!: string;
   @Input() description!: string;
   @Input() topics!: any;
-
+  @Input() username!: string;
 }

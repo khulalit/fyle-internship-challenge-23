@@ -1,7 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, ParamMap, } from '@angular/router';
+import { Component, OnInit, inject, NgModule } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router} from '@angular/router';
 import { ApiService } from './services/api.service';
-
+import { InputDataService } from './services/input-data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -11,26 +12,37 @@ import { ApiService } from './services/api.service';
 export class AppComponent implements OnInit{
 
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  username : string | null = 'khulalit';
+  repos: any;
+  page: any = 1;
+  user: any;
+  totalPages: number = 1;
+  loading: Boolean = false;
+  subscription : Subscription;
+  message : string = "";
 
 
   constructor(
     private apiService: ApiService,
-  ) {}
+    private inputDataService: InputDataService
+  ) {
+    this.subscription = this.apiService.loadingStateChanged.subscribe(
+      (isLoading) => (this.loading = isLoading)
+    );
+  }
 
-  username : string | null = 'khulalit';
-  repos: any;
-  topics = ['js', 'ts', 'react'];
-  page: any = 1;
-  user: any;
-  totalPages: number = 1;
 
   ngOnInit(): void {
+    this.apiService.show();
     this.route.paramMap.subscribe((params: ParamMap)=>{
       this.username = params.get('username');
       this.route.queryParamMap.subscribe((params: ParamMap)=>{
         this.page = params.get('page');
         this.getUserRepos();
         this.getUserDetails();
+        this.apiService.hide();
       })
     })
   }
@@ -44,20 +56,39 @@ export class AppComponent implements OnInit{
       },
       (error) => {
         console.error('Error fetching user details', error);
+        if(error.status === 404){
+          this.message = "No user Found."
+        }
       }
     );
   }
 
   getUserRepos(): void {
-    if(!this.username) return;
-    if(!this.page) {this.page = 1}
-    this.apiService.getUserRepos(this.username, +this.page).subscribe(
-      (data) => {
-        this.repos = data;
-      },
-      (error) => {
-        console.error('Error fetching user repos', error);
+    console.log(this.loading)
+    setTimeout(() => {
+      
+      if(!this.username) return;
+  
+      if(!this.page) {
+        this.page = 1
       }
-    );
+  
+      this.apiService.getUserRepos(this.username, +this.page, this.inputDataService.repoPerPage).subscribe(
+        (data) => {
+          this.repos = data;
+          console.log(data)
+        },
+        (error) => {
+          console.error('Error fetching user repos', error);
+        }
+      );
+    }, 2000);
+  }
+
+  hasRoute(route: string){
+    return this.router.url === route;
+  }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

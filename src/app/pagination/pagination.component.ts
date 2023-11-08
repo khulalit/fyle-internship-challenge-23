@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./pagination.component.scss']
 })
 export class PaginationComponent {
-  @Input() totalPages! : string;
+  @Input() totalPages! : number;
   @Input() currentPage! : string;
   @Input() username! : string;
 

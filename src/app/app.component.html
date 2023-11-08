@@ -1,15 +1,37 @@
 <router-outlet>
-  <div class="p-x-4">
-    <div class=" px-4 -red-100 w-full">
-      <app-user-info />
-    </div>
-    <div class="flex gap-4 flex-wrap justify-start px-4">
-      <div class="basis-[300px] items-stretch flex bg-red-100" *ngFor="let repo of repos;">
-        <app-repositry-card title={{repo.name}} description={{repo.description}} />
+  <ng-container *ngIf="loading; else content">
+    <app-sktelton-loading *ngIf="true"></app-sktelton-loading>
+  </ng-container>
+  <ng-container *ngIf="message">
+    {{message}}
+  </ng-container>
+  
+  <ng-template #content>
+    <!-- <a  *ngIf="!hasRoute('/')" routerLink="/">Home</a> -->
+    <div class="p-x-4" *ngIf="!loading">
+     
+      <div class="px-4 -red-100 w-full">
+        <app-user-info></app-user-info>
+      </div>
+
+      <div class="flex gap-4 flex-wrap justify-center px-4">
+        <div class="basis-[300px] items-stretch flex bg-red-100" *ngFor="let repo of repos">
+          <app-repositry-card
+            [username]="repo.owner.login"
+            [title]="repo.name"
+            [description]="repo.description"
+            [topics]="repo.topics"
+          ></app-repositry-card>
+        </div>
       </div>
     </div>
-  </div>
-  <div *ngIf="username && repos && totalPages" class=" mt-20 w-full">
-    <app-pagination totalPages={{totalPages}} currentPage={{page}} username={{username}}/>
-  </div>
+
+    <div *ngIf="username && repos && totalPages" class="mt-20 w-full">
+      <app-pagination
+        [totalPages]="totalPages"
+        [currentPage]="page"
+        [username]="username"
+      ></app-pagination>
+    </div>
+  </ng-template>
 </router-outlet>
