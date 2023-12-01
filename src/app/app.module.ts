@@ -12,11 +12,12 @@ import { HomeComponent } from './home/home.component';
 import { FormsModule } from '@angular/forms';
 import { InputDataService } from './services/input-data.service';
 import { SkteltonLoadingComponent } from './sktelton-loading/sktelton-loading.component';
+import { UserRepoComponent } from './user-repo/user-repo.component';
 
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, pathMatch: 'full'},
-  { path: 'user/:username', component: AppComponent, title : 'fyle-frontend-challenge', pathMatch: 'full'}
+  { path: '', component: HomeComponent,},
+  { path: 'user/:username', component: UserRepoComponent, title : 'fyle-frontend-challenge'}
 ];
 
 @NgModule({
@@ -27,6 +28,7 @@ const routes: Routes = [
     PaginationComponent,
     HomeComponent,
     SkteltonLoadingComponent,
+    UserRepoComponent,
   ],
   imports: [
     BrowserModule,
